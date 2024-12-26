@@ -157,13 +157,15 @@ async def fetch_manga_images(manga_id):
                         img_headers = headers.copy()
                         img_headers['Host'] = f'{server}.nhentaimg.com'
                         
-                        # Try both with and without 'http://' prefix
-                        test_urls = [
-                            f"http://{server}.nhentaimg.com/{image_pattern}/{page}.webp",
-                            f"https://{server}.nhentaimg.com/{image_pattern}/{page}.webp",
-                            f"http://{server}.nhentaimg.com/{base_dir}/{image_pattern.split('/')[-1]}/{page}.webp",
-                            f"https://{server}.nhentaimg.com/{base_dir}/{image_pattern.split('/')[-1]}/{page}.webp"
-                        ]
+                        # Try different URL patterns and extensions
+                        test_urls = []
+                        for ext in ['.jpg', '.png', '.webp']:
+                            test_urls.extend([
+                                f"http://{server}.nhentaimg.com/{image_pattern}/{page}{ext}",
+                                f"https://{server}.nhentaimg.com/{image_pattern}/{page}{ext}",
+                                f"http://{server}.nhentaimg.com/{base_dir}/{image_pattern.split('/')[-1]}/{page}{ext}",
+                                f"https://{server}.nhentaimg.com/{base_dir}/{image_pattern.split('/')[-1]}/{page}{ext}"
+                            ])
                         
                         for test_url in test_urls:
                             try:
