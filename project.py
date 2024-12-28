@@ -204,13 +204,22 @@ async def fetch_manga_images(manga_id):
             return {}, []  # Return empty dict instead of list
 
 async def download_manga(url):
-    """
-    Download manga images
-    """
-    try:
-        manga_id = extract_manga_id(url)
-        download_folder = os.path.join(os.getcwd(), f"manga_{manga_id}")
-        os.makedirs(download_folder, exist_ok=True)
+    manga_id = extract_manga_id(url)
+    
+    # Base directory for downloads
+    base_dir = os.path.join(os.getcwd(), 'downloads')
+    os.makedirs(base_dir, exist_ok=True)
+    
+    async with httpx.AsyncClient(verify=False) as client:
+        # Get the manga title
+        response = await client.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        title_element = soup.select_one('h1.title')
+        manga_name = safe_format_filename(title_element.text.strip() if title_element else '')
+        
+        # Create directory with ID_NAME format
+        manga_dir = os.path.join(base_dir, f"{manga_id}_{manga_name}")
+        os.makedirs(manga_dir, exist_ok=True)
         
         print(f"Starting download for manga {manga_id}...")
         image_urls, failed_pages = await fetch_manga_images(manga_id)
@@ -259,7 +268,7 @@ async def download_manga(url):
                     
                     # Save image with correct page number
                     filename = f"{page_num:03d}{ext}"
-                    filepath = os.path.join(download_folder, filename)
+                    filepath = os.path.join(manga_dir, filename)
                     
                     with open(filepath, 'wb') as f:
                         f.write(response.content)
@@ -273,50 +282,50 @@ async def download_manga(url):
                         failed_pages.append(page_num)
         
         if downloaded_files:
-            print(f"\nDownload completed! Files saved in: {download_folder}")
+            print(f"\nDownload completed! Files saved in: {manga_dir}")
             if failed_pages:
                 print(f"Failed to download pages: {failed_pages}")
         else:
             print("Failed to download any images")
         
-        return download_folder, failed_pages
+        return manga_dir, failed_pages
         
-    except Exception as e:
-        print(f"Error downloading manga: {e}")
-        traceback.print_exc()
-        return None, []
+def is_valid_nhentai_xxx_url(url):
+    """
+    Validate if the URL is from nhentai.xxx
+    """
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    return 'nhentai.xxx/g/' in url
 
 async def main():
-    """
-    Main function to read manga URLs from user input and download each manga
-    """
-    while True:
-        try:
-            url = input("\nEnter nhentai.xxx manga URL (or press Enter to exit): ").strip()
-            
-            if not url:
-                break
-                
-            if not url.startswith(('http://', 'https://')):
-                url = 'https://' + url
-                
-            if 'nhentai.xxx' not in url:
-                print("Please enter a valid nhentai.xxx URL")
+    try:
+        # Read manga URLs from constants.txt
+        with open('constants.txt', 'r') as f:
+            urls = [line.strip() for line in f if line.strip()]
+        
+        if not urls:
+            print("No URLs found in constants.txt")
+            return
+        
+        for url in urls:
+            # Skip if URL doesn't contain actual link
+            if 'https://' not in url and 'http://' not in url:
                 continue
                 
-            download_path, failed_pages = await download_manga(url)
+            if not is_valid_nhentai_xxx_url(url):
+                print(f"Skipping invalid URL (not from nhentai.xxx): {url}")
+                continue
             
-            if download_path:
-                print(f"\nManga downloaded to: {download_path}")
-            else:
-                print("\nFailed to download manga")
-                
-        except KeyboardInterrupt:
-            print("\nDownload cancelled by user")
-            break
-        except Exception as e:
-            print(f"Error: {e}")
-            traceback.print_exc()
+            try:
+                await download_manga(url)
+                print(f"Successfully downloaded manga from: {url}")
+            except Exception as e:
+                print(f"Error downloading manga from {url}: {str(e)}")
+                traceback.print_exc()
+    except Exception as e:
+        print(f"Error reading constants.txt: {str(e)}")
+        traceback.print_exc()
 
 if __name__ == '__main__':
     asyncio.run(main())
