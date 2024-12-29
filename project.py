@@ -214,11 +214,44 @@ async def download_manga(url):
         # Get the manga title
         response = await client.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
-        title_element = soup.select_one('h1.title')
-        manga_name = safe_format_filename(title_element.text.strip() if title_element else '')
+        
+        # Print the HTML structure for debugging
+        print("Debug - HTML Content:")
+        print(soup.prettify()[:1000])  # Print first 1000 chars of HTML
+        
+        # Try different selectors with debug output
+        title_element = None
+        selectors = [
+            'div#info > h1',
+            'div#info h1',
+            'h1',
+            'div.title',
+            'h2.title'
+        ]
+        
+        for selector in selectors:
+            element = soup.select_one(selector)
+            if element:
+                print(f"Found element with selector '{selector}': {element.text.strip()}")
+                if not title_element:
+                    title_element = element
+        
+        manga_name = ''
+        if title_element:
+            manga_name = safe_format_filename(title_element.text.strip())
+            print(f"Using manga title: {manga_name}")
+        else:
+            print("Warning: Could not find manga title")
+            # As fallback, try to get any text content from #info div
+            info_div = soup.select_one('#info')
+            if info_div:
+                first_text = info_div.get_text(strip=True).split('\n')[0]
+                manga_name = safe_format_filename(first_text)
+                print(f"Using fallback title from #info: {manga_name}")
         
         # Create directory with ID_NAME format
         manga_dir = os.path.join(base_dir, f"{manga_id}_{manga_name}")
+        print(f"Creating directory: {manga_dir}")
         os.makedirs(manga_dir, exist_ok=True)
         
         print(f"Starting download for manga {manga_id}...")
