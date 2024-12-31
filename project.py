@@ -20,6 +20,7 @@ import os
 import asyncio
 import traceback
 import httpx
+import img2pdf
 from bs4 import BeautifulSoup
 
 def extract_manga_id(url):
@@ -203,6 +204,35 @@ async def fetch_manga_images(manga_id):
             traceback.print_exc()
             return {}, []  # Return empty dict instead of list
 
+def convert_to_pdf(manga_dir, downloaded_files):
+    """
+    Convert downloaded manga images to PDF
+    
+    :param manga_dir: Directory containing the manga images
+    :param downloaded_files: List of downloaded image file paths
+    """
+    try:
+        # Sort files by name to maintain page order
+        image_files = sorted(downloaded_files)
+        
+        if not image_files:
+            print(f"No images found in {manga_dir} to convert to PDF")
+            return
+            
+        # Get folder name for PDF name
+        pdf_name = os.path.basename(manga_dir) + '.pdf'
+        pdf_path = os.path.join(manga_dir, pdf_name)
+        
+        # Convert images to PDF
+        with open(pdf_path, "wb") as f:
+            f.write(img2pdf.convert(image_files))
+            
+        print(f"Successfully created PDF: {pdf_path}")
+        
+    except Exception as e:
+        print(f"Error creating PDF: {str(e)}")
+        traceback.print_exc()
+
 async def download_manga(url):
     manga_id = extract_manga_id(url)
     
@@ -316,6 +346,8 @@ async def download_manga(url):
         
         if downloaded_files:
             print(f"\nDownload completed! Files saved in: {manga_dir}")
+            # Convert images to PDF after successful download
+            convert_to_pdf(manga_dir, downloaded_files)
             if failed_pages:
                 print(f"Failed to download pages: {failed_pages}")
         else:
