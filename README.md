@@ -1,7 +1,94 @@
 # Nhentai.xxx Manga Downloader
-
+## Installation and usage youtube video:
 ## Overview
-This Python script enables downloading manga from nhentai.xxx through advanced web scraping techniques. Unlike nhentai.net which provides a public API, nhentai.xxx implements various anti-scraping measures including JavaScript-based page rendering and encrypted image galleries. This script successfully bypasses these protections using sophisticated pattern matching and direct image server access.
+This Python script enables downloading manga from nhentai.xxx through advanced web scraping techniques. Unlike nhentai.net which provides a public API, nhentai.xxx implements various anti-scraping measures including JavaScript-based page rendering and encrypted image galleries. This script successfully bypasses these protections using sophisticated pattern matching and direct image server access. Additionally, it now features automatic PDF generation, converting downloaded manga images into a single, easily readable PDF file.
+
+## Installation Guide
+
+### Windows Installation
+
+1. **System Requirements**:
+   - Windows 10 or later (64-bit recommended)
+   - Internet connection for downloading packages
+
+2. **Installing Python**:
+   - Visit [python.org](https://www.python.org/downloads/)
+   - Download the latest Python 3.8+ installer, recommended Python 3.10.0 for no installation issues
+   - Run the installer with these important steps:
+     1. Check "Add Python to PATH"
+     2. Choose "Customize installation"
+     3. Enable all optional features
+     4. Set installation path (e.g., `C:\Python3`)
+
+3. **Setting up the Development Environment**:
+   ```cmd
+   # Open Command Prompt as Administrator
+
+   # Verify Python installation
+   python --version
+   pip --version
+
+   # Create a project directory
+   mkdir C:\manga-downloader
+   cd C:\manga-downloader
+
+   # Create and activate virtual environment
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+
+4. **Installing the Project**:
+   - Download the project ZIP from GitHub
+   - Extract to `C:\manga-downloader`
+   - Install dependencies:
+     ```cmd
+     pip install -r requirements.txt
+     ```
+
+### Linux Installation
+
+1. **System Requirements**:
+   - Python 3.8 or higher
+   - pip (Python package manager)
+   - git (for cloning the repository)
+
+2. **Installing System Dependencies**:
+   ```bash
+   # For Ubuntu/Debian-based systems
+   sudo apt update
+   sudo apt install python3 python3-pip python3-venv git
+
+   # For Fedora
+   sudo dnf install python3 python3-pip git
+
+   # For Arch Linux
+   sudo pacman -S python python-pip git
+   ```
+
+3. **Setting up the Project**:
+   ```bash
+   # Clone the repository
+   git clone https://github.com/solveditnpc/nhentai.xxx.git
+   cd nhentai.xxx
+
+   # Create a virtual environment
+   python3 -m venv venv
+
+   # Activate the virtual environment
+   source venv/bin/activate
+
+   # Install project dependencies
+   pip install -r requirements.txt
+   ```
+
+4. **Verifying Installation**:
+   ```bash
+   # Check Python version
+   python3 --version
+
+   # Verify pip installation
+   pip --version
+   ```
 
 ## Key Features
 - Downloads complete manga chapters with correct page ordering
@@ -10,6 +97,52 @@ This Python script enables downloading manga from nhentai.xxx through advanced w
 - Supports batch downloading through a constants.txt file
 - Implements parallel downloads using asyncio for better performance
 - Maintains proper HTTP headers to mimic browser behavior
+- **NEW**: Automatically generates PDF files for downloaded manga
+
+
+## Usage Guide
+
+### Basic Configuration
+
+1. **Setting up URLs**:
+   - Locate `constants.txt` in your project directory
+   - Add manga URLs in the following format:
+     ```
+     https://nhentai.xxx/g/XXXXX/
+     https://nhentai.xxx/g/YYYYY/
+     ```
+   - Each URL should be on a new line
+   - URLs must be complete (including https://)
+   - Only nhentai.xxx URLs are supported
+
+2. **Running the Script**:
+   ```bash
+   # Windows
+   python project.py
+   ```
+   
+   ```bash
+   # Linux
+   python3 project.py
+   ```
+
+
+### Output Structure and PDF Generation
+
+The script creates a well-organized output structure:
+```
+downloads/
+├── XXXXX_MangaName1/
+│   ├── 001.jpg
+│   ├── 002.jpg
+│   ├── ...
+│   └── MangaName1.pdf    # Automatically generated PDF
+└── YYYYY_MangaName2/
+    ├── 001.jpg
+    ├── 002.jpg
+    ├── ...
+    └── MangaName2.pdf    # Automatically generated PDF
+```
 
 ## Technical Implementation
 
@@ -79,37 +212,25 @@ Robust error handling ensures reliable downloads:
    - Handles missing pages gracefully
    - Reports failed downloads for user awareness
 
-## Usage
+### PDF Generation Features
 
-### Prerequisites
-```bash
-pip install -r requirements.txt
-```
+1. **Automatic Processing**:
+   - PDFs are generated automatically after all images are downloaded
+   - No manual intervention required
+   - Maintains original image quality
+   - Pages are correctly ordered in the PDF
 
-### Running the Script
-1. Add manga URLs to `constants.txt`:
-   ```
-   https://nhentai.xxx/g/XXXXX/
-   https://nhentai.xxx/g/YYYYY/
-   ```
+2. **File Organization**:
+   - PDF files are named after the manga title
+   - Stored in the same directory as the images
+   - Easy to locate and access
+   - Original images are preserved
 
-2. Run the script:
-   ```bash
-   python nhentai.xxx.py
-   ```
-
-### Output Structure
-```
-downloads/
-├── XXXXX_MangaName1/
-│   ├── 001.jpg
-│   ├── 002.jpg
-│   └── ...
-└── YYYYY_MangaName2/
-    ├── 001.jpg
-    ├── 002.jpg
-    └── ...
-```
+3. **Quality Control**:
+   - High-quality image conversion
+   - Maintains aspect ratios
+   - Optimized file size
+   - Preserves image clarity
 
 ## Technical Details
 
@@ -129,6 +250,43 @@ downloads/
 - Implements rate limiting
 - Uses proper HTTP headers
 - Maintains session consistency
+
+## Troubleshooting Guide
+
+### Installation Issues
+
+1. **Linux-specific**:
+   - Permission errors: Use `sudo` for system-wide installations
+   - Missing packages: Install build essentials
+     ```bash
+     sudo apt install build-essential python3-dev
+     ```
+   - Virtual environment issues:
+     ```bash
+     python3 -m pip install --user virtualenv
+     ```
+
+2. **Windows-specific**:
+   - PATH issues: Manually add Python to system PATH
+   - Permission errors: Run CMD as Administrator
+   - SSL errors: Install Windows certificates
+     ```cmd
+     python -m pip install --upgrade certifi
+     ```
+
+### Download and PDF Issues
+
+1. **Download Problems**:
+   - Check internet connection
+   - Verify URL format in constants.txt
+   - Ensure sufficient disk space
+   - Check console for error messages
+
+2. **PDF Generation**:
+   - Memory issues: Close other applications
+   - File permission errors: Check folder permissions
+   - Image conversion errors: Verify image files
+   - PDF quality issues: Check source image quality
 
 ## Limitations
 - Requires stable internet connection
