@@ -301,11 +301,33 @@ Robust error handling ensures reliable downloads:
 - Implement download queue management
 - Add support for alternative image servers
 
+## Testing
+The project includes a comprehensive test suite in `test_project.py` that verifies the core functionality of the downloader. The tests cover:
+
+1. **URL Processing**
+   - Manga ID extraction from various URL formats
+   - URL validation for nhentai.xxx domain
+   - Handling of invalid URLs and edge cases
+
+2. **Filename Handling**
+   - Safe filename creation from manga titles
+   - Removal of invalid characters
+   - Length limits and empty input handling
+
+To run the tests:
+```bash
+# Windows
+python -m unittest test_project.py
+
+# Linux
+python3 -m unittest test_project.py
+```
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
-Copyright (C) 2024  solveditnpc
+Copyright (C) 2024  solveditnpc <neutralwritergithubdedicated@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
