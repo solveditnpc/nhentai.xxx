@@ -325,16 +325,16 @@ python3 -m unittest test_project.py
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
 Copyright (C) 2024  solveditnpc <neutralwritergithubdedicated@gmail.com>
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This program comes with ABSOLUTELY NO WARRANTY. For details, see the GNU General Public License.
+This program comes with ABSOLUTELY NO WARRANTY. For details, see the GNU Affero General Public License.
 
 ## Disclaimer
 This script is for educational purposes only. Please respect the website's terms of service and use responsibly. Read the license for more information
