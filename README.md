@@ -48,56 +48,128 @@ This Python script enables downloading manga from nhentai.xxx through advanced w
 ### Linux Installation
 
 1. **System Requirements**:
-   - Python 3.8 or higher
-   - pip (Python package manager)
-   - git (for cloning the repository)
+   - Any modern Linux distribution (Ubuntu, Debian, Fedora, etc.)
 
-2. **Installing System Dependencies**:
-   ```bash
-   # For Ubuntu/Debian-based systems
-   sudo apt update
-   sudo apt install python3 python3-pip python3-venv git
+2. **Install Required System Dependencies**:
+```bash
+# For Ubuntu/Debian-based systems
+sudo apt-get update
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+liblzma-dev python-openssl git
+```
 
-   # For Fedora
-   sudo dnf install python3 python3-pip git
+3. **Install pyenv**:
+```bash
+# Install pyenv
+curl https://pyenv.run | bash
 
-   # For Arch Linux
-   sudo pacman -S python python-pip git
-   ```
+# Add pyenv to your shell configuration (~/.bashrc or ~/.zshrc)
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 
-3. **Setting up the Project**:
-   ```bash
-   # Clone the repository
-   git clone https://github.com/solveditnpc/nhentai.xxx.git
-   cd nhentai.xxx
+# Reload shell configuration
+source ~/.bashrc
+```
 
-   # Create a virtual environment
-   python3 -m venv venv
+4. **Install Python 3.10.0**:
+```bash
+# Install Python 3.10.0 using pyenv
+pyenv install 3.10.0
 
-   # Activate the virtual environment
-   source venv/bin/activate
+# Navigate to your project directory
+cd your_project_directory
 
-   # Install project dependencies
-   pip install -r requirements.txt
-   ```
+# Set local Python version for that specific folder
+pyenv local 3.10.0
 
-4. **Verifying Installation**:
-   ```bash
-   # Check Python version
-   python3 --version
+# Verify installation
+python -V  # Should show Python 3.10.0
+```
 
-   # Verify pip installation
-   pip --version
-   ```
+5. **Set Up Virtual Environment**:
+```bash
+# Create virtual environment
+python -m venv venv
 
-## Key Features
-- Downloads complete manga chapters with correct page ordering
-- Saves manga in organized folders with format: `mangaID_mangaName`
-- Handles anti-scraping protections without using Selenium or browser automation
-- Supports batch downloading through a constants.txt file
-- Implements parallel downloads using asyncio for better performance
-- Maintains proper HTTP headers to mimic browser behavior
-- **NEW**: Automatically generates PDF files for downloaded manga
+# Activate virtual environment
+source venv/bin/activate
+```
+
+6. **Install Required Python Packages**:
+```bash
+# Ensure pip is up to date
+pip install --upgrade pip
+
+# Install project dependencies
+pip install -r requirements.txt
+```
+
+### macOS Installation
+
+1. **System Requirements**:
+   - macOS 10.15 (Catalina) or later
+   - Command Line Tools for Xcode
+
+2. **Install Command Line Tools and Homebrew**:
+```bash
+# Install Command Line Tools
+xcode-select --install
+
+# Install Homebrew if not already installed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+3. **Install pyenv using Homebrew**:
+```bash
+# Install pyenv
+brew update
+brew install pyenv
+
+# Add pyenv to shell configuration (for zsh)
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+
+# If using bash instead of zsh, replace .zshrc with .bash_profile
+# Reload shell configuration
+source ~/.zshrc
+```
+
+4. **Install Python 3.10.0**:
+```bash
+# Install Python 3.10.0 using pyenv
+pyenv install 3.10.0
+
+# Navigate to your project directory
+cd your_project_directory
+
+# Set local Python version for that specific folder
+pyenv local 3.10.0
+
+# Verify installation
+python -V  # Should show Python 3.10.0
+```
+
+5. **Set Up Virtual Environment**:
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate
+```
+
+6. **Install Required Python Packages**:
+```bash
+# Ensure pip is up to date
+pip install --upgrade pip
+
+# Install project dependencies
+pip install -r requirements.txt
+```
 
 
 ## Usage Guide
@@ -123,9 +195,22 @@ This Python script enables downloading manga from nhentai.xxx through advanced w
    
    ```bash
    # Linux
-   python3 project.py
+   python project.py
    ```
 
+   ```bash
+   # macOS
+   python project.py
+   ```
+
+## Key Features
+- Downloads complete manga chapters with correct page ordering
+- Saves manga in organized folders with format: `mangaID_mangaName`
+- Handles anti-scraping protections without using Selenium or browser automation
+- Supports batch downloading through a constants.txt file
+- Implements parallel downloads using asyncio for better performance
+- Maintains proper HTTP headers to mimic browser behavior
+- **NEW**: Automatically generates PDF files for downloaded manga
 
 ### Output Structure and PDF Generation
 
