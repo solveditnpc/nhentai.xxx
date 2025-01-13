@@ -3,6 +3,29 @@
 ## Overview
 This Python script enables downloading manga from nhentai.xxx through advanced web scraping techniques. Unlike nhentai.net which provides a public API, nhentai.xxx implements various anti-scraping measures including JavaScript-based page rendering and encrypted image galleries. This script successfully bypasses these protections using sophisticated pattern matching and direct image server access. Additionally, it now features automatic PDF generation, converting downloaded manga images into a single, easily readable PDF file.
 
+## Difference Between Download Scripts
+
+### project.py vs project_asynchronous_verification_download.py
+
+| Feature           | project.py               | project_asynchronous_verification_download.py |
+|-------------------|--------------------------|-----------------------------------------------|
+| Download Method   | Synchronous (Sequential) | Asynchronous (Parallel)                       |
+| Verification      | Basic                    | Advanced with file integrity checks           |
+| Speed             | Standard                 | Faster due to parallel downloads              |
+| Memory Usage      | Lower                    | Slightly higher due to async operations       |
+| Error Handling    | Basic retry mechanism    | Advanced with verification and auto-retry     |
+| Progress Tracking | Simple progress bar      | Detailed progress with verification status    |
+
+Choose `project.py` if:
+- You have limited system resources
+- You prefer simpler, straightforward downloads
+- You don't need advanced verification
+
+Choose `project_asynchronous_verification_download.py` if:
+- You want faster downloads through parallel processing
+- You need file integrity verification
+- You have a stable internet connection and good system resources
+
 ## Installation Guide
 
 ### Windows Installation
@@ -171,7 +194,6 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-
 ## Usage Guide
 
 ### Basic Configuration
@@ -188,20 +210,53 @@ pip install -r requirements.txt
    - Only nhentai.xxx URLs are supported
 
 2. **Running the Script**:
-   ```bash
-   # Windows
-   python project.py
-   ```
-   
-   ```bash
-   # Linux
-   python project.py
-   ```
 
-   ```bash
-   # macOS
-   python project.py
-   ```
+#### Windows
+
+1. Open Command Prompt or PowerShell
+2. Navigate to the project directory:
+```cmd
+cd path\to\nhentai.xxx
+```
+3. Run the script:
+```cmd
+python project.py
+# OR for async version
+python "project_ asynchronous_verification_download.py"
+```
+
+#### Linux
+
+1. Open Terminal
+2. Navigate to the project directory:
+```bash
+cd path/to/nhentai.xxx
+```
+3. Run the script:
+```bash
+python project.py
+# OR for async version
+python "project_ asynchronous_verification_download.py"
+```
+
+#### macOS
+
+1. Open Terminal
+2. Navigate to the project directory:
+```bash
+cd path/to/nhentai.xxx
+```
+3. Run the script:
+```bash
+python project.py
+# OR for async version
+python "project_ asynchronous_verification_download.py"
+```
+
+Note: For all platforms, make sure you have installed the required dependencies using:
+```bash
+pip install -r requirements.txt
+```
 
 ## Key Features
 - Downloads complete manga chapters with correct page ordering
