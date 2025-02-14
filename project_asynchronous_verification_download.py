@@ -25,6 +25,7 @@ from bs4 import BeautifulSoup
 from typing import Dict, List, Tuple, Set, Optional
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
+from PIL import Image
 
 @dataclass
 class ImagePattern:
@@ -309,8 +310,33 @@ def convert_to_pdf(manga_dir: str, downloaded_files: List[str]) -> None:
         pdf_name = os.path.basename(manga_dir) + '.pdf'
         pdf_path = os.path.join(manga_dir, pdf_name)
         
+        # Create temporary files for RGB images
+        rgb_images = []
+        temp_files = []
+        
+        for img_path in image_files:
+            with Image.open(img_path) as img:
+                # Convert to RGB if image has alpha channel
+                if img.mode in ('RGBA', 'LA') or (img.mode == 'P' and 'transparency' in img.info):
+                    img = img.convert('RGB')
+                    # Save to temporary file
+                    temp_path = img_path + '_temp.jpg'
+                    img.save(temp_path, 'JPEG', quality=95)
+                    temp_files.append(temp_path)
+                    rgb_images.append(temp_path)
+                else:
+                    rgb_images.append(img_path)
+        
+        # Convert to PDF
         with open(pdf_path, "wb") as f:
-            f.write(img2pdf.convert(image_files))
+            f.write(img2pdf.convert(rgb_images))
+            
+        # Clean up temporary files
+        for temp_file in temp_files:
+            try:
+                os.remove(temp_file)
+            except:
+                pass
             
         print(f"Successfully created PDF: {pdf_path}")
         
