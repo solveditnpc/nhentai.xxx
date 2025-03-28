@@ -5,16 +5,18 @@ This Python script enables downloading manga from nhentai.xxx through advanced w
 
 ## Difference Between Download Scripts
 
-### project.py vs project_asynchronous_verification_download.py
+### Comparison Table
 
-| Feature           | project.py               | project_asynchronous_verification_download.py |
-|-------------------|--------------------------|-----------------------------------------------|
-| Download Method   | Synchronous (Sequential) | Asynchronous (Parallel)                       |
-| Verification      | Basic                    | Advanced with file integrity checks           |
-| Speed             | Standard                 | Faster due to parallel downloads              |
-| Memory Usage      | Lower                    | Slightly higher due to async operations       |
-| Error Handling    | Basic retry mechanism    | Advanced with verification and auto-retry     |
-| Progress Tracking | Simple progress bar      | Detailed progress with verification status    |
+| Feature           | project.py               | project_asynchronous_verification_download.py | author_download.py                        |
+|-------------------|--------------------------|---------------------------------------------|------------------------------------------|
+| Download Method   | Synchronous (Sequential) | Asynchronous (Parallel)                      | Asynchronous (Parallel)                  |
+| Verification      | Basic                    | Advanced with file integrity checks          | Advanced with page validation            |
+| Speed             | Standard                 | Faster due to parallel downloads             | Optimized for author-specific downloads  |
+| Memory Usage      | Lower                    | Slightly higher due to async operations      | Moderate with efficient page handling    |
+| Error Handling    | Basic retry mechanism    | Advanced with verification and auto-retry    | Robust with pagination error handling    |
+| Progress Tracking | Simple progress bar      | Detailed progress with verification status   | Page-by-page progress with URL tracking  |
+| Special Features  | Basic manga download     | File integrity focus                         | Author-specific search and bulk download |
+| Custom Path      | No                      | No                                          | Yes - Customizable download location     |
 
 Choose `project.py` if:
 - You have limited system resources
@@ -25,6 +27,12 @@ Choose `project_asynchronous_verification_download.py` if:
 - You want faster downloads through parallel processing
 - You need file integrity verification
 - You have a stable internet connection and good system resources
+
+Choose `author_download.py` if:
+- You want to download all works from a specific author
+- You need to download specific entries from an author's collection
+- You want to customize where files are downloaded
+- You need efficient handling of large author collections
 
 ## Installation Guide
 
