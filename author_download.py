@@ -22,7 +22,7 @@ import httpx
 import shutil
 from bs4 import BeautifulSoup
 from typing import List, Optional
-from parallel_download import download_manga
+from project_asynchronous_verification_download import download_manga
 
 async def get_total_pages(client: httpx.AsyncClient, base_url: str, headers: dict) -> int:
     """Get the total number of pages for a search result or listing."""
